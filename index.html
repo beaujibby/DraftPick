@@ -1572,6 +1572,7 @@
 
         let current_skin = -1;
         let skin_name = document.querySelector("#skin_name");
+        //let unvoted_skins = [];
         let pickSkin = () => {
             let unvoted_skins = votes.filter(skin => skin.rating === "unrated");
             if(unvoted_skins === []) {
@@ -1586,7 +1587,7 @@
         let likes = document.querySelector("#likes");
         let like = () => {
             votes[current_skin].rating = "liked";
-            localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
+            //localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
 
             let container = document.createElement("div");
             container.classList.add("vote");
@@ -1606,7 +1607,7 @@
         let dislikes = document.querySelector("#dislikes");
         let dislike = () => {
             votes[current_skin].rating = "disliked";
-            localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
+            //localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
 
             let container = document.createElement("div");
             container.classList.add("vote");
