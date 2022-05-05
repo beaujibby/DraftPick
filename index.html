@@ -1556,88 +1556,115 @@
             {"champion": "Swain", "skin_name": "Hextech Swain", "splash_source": "images/Swain_11.jpg", "rating": "unrated"},
             {"champion": "Swain", "skin_name": "Crystal Rose Swain", "splash_source": "images/Swain_12.jpg", "rating": "unrated"},
         ];
-
-        let votes = skin_images;
-
         
-
-        /*skin_images.forEach(skin => {
-            if(!localStorage.getItem(skin.skin_name)) {
-                localStorage.setItem(skin.skin_name, JSON.stringify(skin));
-                votes.push(skin);
-            } else {
-                votes.push(JSON.parse(localStorage.getItem(skin.skin_name)));
+        skin_images.sort((a,b) => Math.random() > 0.5 ? 1 : -1);
+        
+        let likes = document.querySelector("#likes");
+        let dislikes = document.querySelector("#dislikes");
+        skin_images.forEach(skin => { //load in already voted on skins
+            if(localStorage.getItem(skin.skin_name) !== null) {
+                if(localStorage.getItem(skin.skin_name).rating === "disliked") { //add to disliked column
+                    let container = document.createElement("div");
+                    container.classList.add("vote");
+                    
+                    let nameplate = document.createElement("p");
+                    nameplate.innerText = skin.skin_name;
+                    
+                    let icon = document.createElement("img");
+                    icon.classList.add("icon");
+                    icon.src = skin.splash_source;
+                    
+                    container.appendChild(icon);
+                    container.appendChild(nameplate);
+                    likes.appendChild(container);
+                }
+                if(localStorage.getItem(skin.skin_name).rating === "liked") { //add to liked column
+                    let container = document.createElement("div");
+                    container.classList.add("vote");
+                    
+                    let nameplate = document.createElement("p");
+                    nameplate.innerText = skin.skin_name;
+                    
+                    let icon = document.createElement("img");
+                    icon.classList.add("icon");
+                    icon.src = skin.splash_source;
+                    
+                    container.appendChild(icon);
+                    container.appendChild(nameplate);
+                    likes.appendChild(container);
+                }
             }
-        });*/
+        })
+        
+        skin_images.filter(skin => {localStorage.getItem(skin.skin_name) !== null}); //don't continue to vote on already voted on skins
 
         let current_skin = -1;
         let skin_name = document.querySelector("#skin_name");
         //let unvoted_skins = [];
         let pickSkin = () => {
-            let unvoted_skins = votes.filter(skin => skin.rating === "unrated");
-            if(unvoted_skins === []) {
-                current_skin = -1;
-                return '<p>no more skins!</p>';
-            }
-            current_skin = Math.floor(Math.random() * unvoted_skins.length);
-            skin_name.innerText = unvoted_skins[current_skin].skin_name;
-            return unvoted_skins[current_skin].splash_source;
+            current_skin = skin_images.length - 1;
+            skin_name.innerText = skin_images[current_skin].skin_name;
+            return current_skin;
         }
-
-        let likes = document.querySelector("#likes");
+        
         let like = () => {
-            votes[current_skin].rating = "liked";
-            //localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
-
+            skin_images[current_skin].rating = "liked";
+            
             let container = document.createElement("div");
             container.classList.add("vote");
-
+            
             let nameplate = document.createElement("p");
-            nameplate.innerText = votes[current_skin].skin_name;
-
+            nameplate.innerText = skin_images[current_skin].skin_name;
+            
             let icon = document.createElement("img");
             icon.classList.add("icon");
-            icon.src = votes[current_skin].splash_source;
-
+            icon.src = skin_images[current_skin].splash_source;
+            
             container.appendChild(icon);
             container.appendChild(nameplate);
             likes.appendChild(container);
+
+            localStorage.setItem(current_skin.skin_name, JSON.stringify(skin_images.pop()));
         }
-
-        let dislikes = document.querySelector("#dislikes");
+        
         let dislike = () => {
-            votes[current_skin].rating = "disliked";
-            //localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
-
+            skin_images[current_skin].rating = "disliked";
+            
             let container = document.createElement("div");
             container.classList.add("vote");
-
+            
             let nameplate = document.createElement("p");
-            nameplate.innerText = votes[current_skin].skin_name;
-
+            nameplate.innerText = skin_images[current_skin].skin_name;
+            
             let icon = document.createElement("img");
             icon.classList.add("icon");
-            icon.src = votes[current_skin].splash_source;
-
+            icon.src = skin_images[current_skin].splash_source;
+            
             container.appendChild(icon);
             container.appendChild(nameplate);
             dislikes.appendChild(container);
+
+            localStorage.setItem(current_skin.skin_name, JSON.stringify(skin_images.pop()));
         }
         
         let dislike_button = document.querySelector("#dislike");
         let like_button = document.querySelector("#like");
         let img = document.querySelector("img");
+
+        img.addEventListener("click", () => {
+            window.open("https://www.youtube.com/results?search_query=" + skin_name.innerText + " skin spotlight");
+        });
         
-        img.src = pickSkin();
+        img.src = skin_images[pickSkin()].splash_source;
         
         dislike_button.onclick = () => {dislike(); img.src = pickSkin();}
         like_button.onclick = () => {like(); img.src = pickSkin();}
         window.addEventListener("keydown", key => {
             if(key.key === "ArrowLeft" || key.key === "a") { //dislike
-                dislike(); img.src = pickSkin();
+                dislike(); img.src = skin_images[pickSkin()].splash_source;
             }
             if(key.key === "ArrowRight" || key.key === "d") { //dislike
-                like(); img.src = pickSkin();
+                like(); img.src = skin_images[pickSkin()].splash_source;
             }
         });
     </script>
