@@ -1586,6 +1586,7 @@
         let likes = document.querySelector("#likes");
         let like = () => {
             votes[current_skin].rating = "liked";
+            localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
 
             let container = document.createElement("div");
             container.classList.add("vote");
@@ -1605,6 +1606,7 @@
         let dislikes = document.querySelector("#dislikes");
         let dislike = () => {
             votes[current_skin].rating = "disliked";
+            localStorage.setItem(current_skin.skin_name, JSON.stringify(current_skin));
 
             let container = document.createElement("div");
             container.classList.add("vote");
