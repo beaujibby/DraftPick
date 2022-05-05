@@ -1562,8 +1562,8 @@
         let likes = document.querySelector("#likes");
         let dislikes = document.querySelector("#dislikes");
         skin_images.forEach(skin => { //load in already voted on skins
-            if(localStorage.getItem(skin.skin_name) !== null) {
-                if(localStorage.getItem(skin.skin_name).rating === "disliked") { //add to disliked column
+            if(window.localStorage.getItem(skin.skin_name) !== null) {
+                if(JSON.parse(window.localStorage.getItem(skin.skin_name)).rating === "disliked") { //add to disliked column
                     let container = document.createElement("div");
                     container.classList.add("vote");
                     
@@ -1576,9 +1576,9 @@
                     
                     container.appendChild(icon);
                     container.appendChild(nameplate);
-                    likes.appendChild(container);
+                    dislikes.appendChild(container);
                 }
-                if(localStorage.getItem(skin.skin_name).rating === "liked") { //add to liked column
+                if(JSON.parse(window.localStorage.getItem(skin.skin_name)).rating === "liked") { //add to liked column
                     let container = document.createElement("div");
                     container.classList.add("vote");
                     
@@ -1596,7 +1596,7 @@
             }
         })
         
-        skin_images.filter(skin => {localStorage.getItem(skin.skin_name) !== null}); //don't continue to vote on already voted on skins
+        skin_images.filter(skin => {window.localStorage.getItem(skin.skin_name) !== null}); //don't continue to vote on already voted on skins
 
         let current_skin = -1;
         let skin_name = document.querySelector("#skin_name");
@@ -1624,7 +1624,7 @@
             container.appendChild(nameplate);
             likes.appendChild(container);
 
-            localStorage.setItem(current_skin.skin_name, JSON.stringify(skin_images.pop()));
+            window.localStorage.setItem(skin_images[current_skin].skin_name, JSON.stringify(skin_images.pop()));
         }
         
         let dislike = () => {
@@ -1644,7 +1644,7 @@
             container.appendChild(nameplate);
             dislikes.appendChild(container);
 
-            localStorage.setItem(current_skin.skin_name, JSON.stringify(skin_images.pop()));
+            window.localStorage.setItem(skin_images[current_skin].skin_name, JSON.stringify(skin_images.pop()));
         }
         
         let dislike_button = document.querySelector("#dislike");
